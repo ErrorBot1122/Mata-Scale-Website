@@ -1,0 +1,21 @@
+{
+  "name": "mata-scale-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "browserify": "^17.0.0",
+    "express": "^4.17.1",
+    "express-generator": "^4.16.1",
+    "rbx-file-handler": "github:Errorbot1122/Roblox-File-Handler#unstable"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "build": "browserify public/home/main.js -o build.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
