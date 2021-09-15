@@ -5,6 +5,7 @@ const starAgePallet = [0xafc9ff, 0xc7d8ff, 0xfff4f3, 0xffe5cf, 0xffd9b2, 0xffc78
 let scene = new THREE.Scene();
 
 let camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 )
+
 camera.position.z = 5;
 
 let renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -29,7 +30,7 @@ const starMat = new THREE.MeshBasicMaterial({
 
   color: starAgePallet[ Math.round( Math.random() * starAgePallet.length ) ]
 
-});;
+});
 
 const sphere = new THREE.Mesh( starGeo, starMat );
 
