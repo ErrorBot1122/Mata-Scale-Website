@@ -4,18 +4,43 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "browserify": "^17.0.0",
+    "cookie-parser": "^1.4.4",
+    "debug": "^2.6.9",
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-generator": "^4.16.1",
-    "rbx-file-handler": "github:Errorbot1122/Roblox-File-Handler#unstable"
+    "http-errors": "^1.6.3",
+    "morgan": "^1.9.1",
+    "rbx-file-handler": "Errorbot1122/Roblox-File-Handler#experimental",
+    "save": "^2.4.0",
+    "three": "^0.132.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "browserify": "^17.0.0",
+    "browserify-shim": "^3.8.14",
+    "del": "^6.0.0",
+    "glob": "^7.1.7",
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-flatmap": "^1.0.2",
+    "gulp-rename": "^2.0.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
+    "nodemon": "^2.0.12",
+    "pump": "^3.0.0",
+    "vinyl-source-stream": "^2.0.0",
+    "watch": "^1.0.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "build": "browserify public/home/main.js -o build.js"
+    "serverStart": "node index.js",
+    "build": "gulp",
+    "start": "npm run build && npm run serverStart",
+    "serverWatch": "nodemon index.js",
+    "buildWatch": "gulp watchJS"
   },
   "keywords": [],
-  "author": "",
+  "author": "Errorbot1122",
   "license": "ISC"
 }
