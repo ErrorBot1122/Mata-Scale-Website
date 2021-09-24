@@ -1,41 +1,64 @@
-const THREE = require('three')
+/* VARS */
 
-const starAgePallet = [0xafc9ff, 0xc7d8ff, 0xfff4f3, 0xffe5cf, 0xffd9b2, 0xffc78e, 0xffa651];
+// init null vars
+let camera, scene, controls, renderer = null
 
-let scene = new THREE.Scene();
+function setup() {
 
-let camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 )
+  // Create the scene
+  scene = new THREE.Scene();
 
-camera.position.z = 5;
+  // Create and init the render
+  renderer = new THREE.WebGLRenderer( { antialias: true } );
+  renderer.setClearColor(/*"#333036"*/"#000000");
+  renderer.setSize( window.innerWidth, window.innerHeight );
 
-let renderer = new THREE.WebGLRenderer( { antialias: true } );
+  // Create and init the camera
+  camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 )
+  camera.position.z = 5;
 
-renderer.setClearColor("#333036");
-renderer.setSize( window.innerWidth, window.innerHeight );
+  // Create the orbitc controls
+  controls = new THREE.OrbitControls( camera, renderer.domElement );
 
-document.body.appendChild( renderer.domElement );
+  // adds the render to the body
+  document.body.appendChild( renderer.domElement );
+}
 
-window.addEventListener('resize', () => {
+function resizeRendererToDisplaySize(renderer) {
+  const canvas = renderer.domElement;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  const needResize = canvas.width !== width || canvas.height !== height;
+  if (needResize) {
+    renderer.setSize(width, height, false);
+  }
+  return needResize;
+}
 
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    camera.aspect = window.innerWidth / window.innerHeight;
+// load skybox loader
+{
+  // creates the loader
+  const loader = new THREE.TextureLoader();
 
+  // load the 360 texture
+  const texture = loader.load(
+    '../assets/images/skyboxs/Milkyway_Galaxy_Skybox_Sphere_Map_8k.webp',
+    () => {
+      const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+      rt.fromEquirectangularTexture(renderer, texture);
+      scene.background = rt.texture;
+    });
+}
+
+function draw() {
+
+  if (resizeRendererToDisplaySize(renderer)) {
+    const canvas = renderer.domElement;
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
     camera.updateProjectionMatrix();
+  }
 
-});
+  controls.update();
 
-const starGeo = new THREE.SphereGeometry(2, 6, 6);
-
-const starMat = new THREE.MeshBasicMaterial({
-
-  color: starAgePallet[ Math.round( Math.random() * starAgePallet.length ) ]
-
-});
-
-const sphere = new THREE.Mesh( starGeo, starMat );
-
-sphere.position.z = 4 - Math.random() * -10;
-
-scene.add( sphere );
-
-renderer.render(scene, camera);
+  renderer.render(scene, camera);
+}
