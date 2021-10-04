@@ -2,8 +2,6 @@
   This was mainly made for debuging purpuse
 */
 
-//const CustomEvent = document.defaultView.CustomEvent
-
 // Logs
 console.defaultLog = console.log.bind(console);
 console.logs = [];
@@ -15,14 +13,22 @@ console.log = function(){
   // new & array data
   console.logs.push(Array.from(arguments));
 
-  // create the custom event
+  // create the custom events
   let logEvent = new CustomEvent("onConsoleLog", {
-    args: arguments, 
-    logs: console.logs
+    detail: {
+      args: arguments
+    }
   });
 
-  // dispach (send) the event to document
+  let allLogEvenvt = new CustomEvent("onConsoleEny", {
+      detail: {
+        args: arguments
+      }
+  });
+
+  // dispach (send) the events to document
   document.dispatchEvent(logEvent);
+  document.dispatchEvent(allLogEvenvt);
 }
 
 //Errors
@@ -38,12 +44,20 @@ console.error = function(){
 
   // create the custom event
   let errorEvent = new CustomEvent("onConsoleError", {
-    args: arguments, 
-    logs: console.errors
+    detail: {
+      args: arguments
+    }
+  });
+
+  let allLogEvenvt = new CustomEvent("onConsoleEny", {
+      detail: {
+        args: arguments
+      }
   });
 
   // dispach (send) the event to document
   document.dispatchEvent(errorEvent);
+  document.dispatchEvent(allLogEvenvt);
 }
 
 //Warn
@@ -59,12 +73,20 @@ console.warn = function(){
 
   // create the custom event
   let warnEvent = new CustomEvent("onConsoleWarn", {
-    args: arguments, 
-    logs: console.warns
+    detail: {
+      args: arguments
+    }
   });
 
+  let allLogEvenvt = new CustomEvent("onConsoleEny", {
+      detail: {
+        args: arguments
+      }
+  });
+  
   // dispach (send) the event to document
   document.dispatchEvent(warnEvent);
+  document.dispatchEvent(allLogEvenvt);
 }
 
 //Debug
@@ -79,10 +101,29 @@ console.debug = function(){
 
   // create the custom event
   let debugEvent = new CustomEvent("onConsoleDebug", {
-    args: arguments, 
-    logs: console.debugs
+    detail: {
+      args: arguments
+    }
+  });
+
+  let allLogEvenvt = new CustomEvent("onConsoleEny", {
+      detail: {
+        args: arguments
+      }
   });
 
   // dispach (send) the event to document
   document.dispatchEvent(debugEvent);
+  document.dispatchEvent(allLogEvenvt);
 }
+
+
+
+window.onerror = (msg, src, line, col, err) => {
+  alert(`${msg}, ${src} [${line}:${col}]`);
+  alert('=========STACKTRACE=========\n' + err.stack.toString());
+}
+
+window.addEventListener('onConsoleEny', e => {
+  alert(e.detail.args.join(", "));
+});

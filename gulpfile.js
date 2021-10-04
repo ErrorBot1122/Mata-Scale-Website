@@ -1,9 +1,9 @@
-const {series, dest, src, watch} = require('gulp')
-
+// gulp stuff
 const browserify = require('browserify'),
       clean = require('gulp-clean'),
       concat = require('gulp-concat'),
-      del = require('del')
+      del = require('del'),
+      exit = require('gulp-exit'),
       flatmap = require('gulp-flatmap'),
       glob = require('glob'),
       gulp = require('gulp'),
@@ -13,7 +13,12 @@ const browserify = require('browserify'),
       sourcemaps = require('gulp-sourcemaps'),
       source_stream = require('vinyl-source-stream'),
       uglyify = require('gulp-uglify')
-      
+
+// gulp requires      
+const {series, dest, src, watch} = gulp
+
+// other
+const process = require("process")
 
 function createBuildEachFile(stream, file) {
 
@@ -55,7 +60,7 @@ function createBuildTask() {
         .pipe(dest('./public/builds'))
 }
 
-function minifyBuildTask(callback) {
+function minifyBuildTask(cb) {
     
     pump([
         // Gets all websites 'build' files
@@ -71,26 +76,10 @@ function minifyBuildTask(callback) {
         dest('./public/builds')
     
     // Ends the task
-    ], callback());
+    ], cb());
+
+    process.exit(0);
 }
-
-// Creates the main task (Mainly for the 'watchJS' function)
-let mainTask = series(cleanBuilds, createBuildTask, minifyBuildTask)
-
-function watchJS(cb) {
-
-    // Creates the watcher with the right settings
-    let mainWatcher = watch(['public/javascripts/*.js'])
-
-    // Watches all the JS files and runs the 'mainTask' if it changes
-    mainWatcher.on('all', mainTask)
-
-    // End the function (But still keeps the watcher)
-    cb();
-}
-
-// Added a public task to for watching the js files
-exports.watchJS = watchJS
 
 // returns all the taskes in order
-exports.default = mainTask
+exports.default = series(cleanBuilds, createBuildTask, minifyBuildTask)
